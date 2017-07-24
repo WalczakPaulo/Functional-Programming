@@ -111,4 +111,69 @@ class FunSetSuite extends FunSuite {
   }
 
 
+  test("intersection contains contains elements from both sets only") {
+    new TestSets {
+      val u1 = union(s1, s2)
+      val u2 = union(s2, s3)
+      val intersection = intersect(u1, u2)
+      assert(!contains(intersection, 1), "Intersection 1")
+      assert(contains(intersection, 2), "Intersection 2")
+      assert(!contains(intersection, 3), "Intersection 3")
+    }
+  }
+
+  test("Filter - same job as Intersection") {
+    new TestSets {
+      val u1 = union(s1, s2)
+      val u2 = union(s2, s3)
+      val filtered = filter(u1, u2)
+      assert(!contains(filtered, 1), "Filter 1")
+      assert(contains(filtered, 2), "Filter 2")
+      assert(!contains(filtered, 3), "Filter 3")
+    }
+  }
+
+  test("Difference - elements contained those in first set, that are not in the second"){
+    new TestSets {
+      val u1 = union(s1, s2)
+      val u2 = union(s2, s3)
+      val difference = diff(u1, u2)
+      assert(contains(difference, 1), "difference 1")
+      assert(!contains(difference, 2), "difference 2")
+      assert(!contains(difference, 3), "difference 3")
+    }
+  }
+
+  test("Forall - tests") {
+    new TestSets {
+      val u1 = union(union(s1, s2), s3)
+      assert(forall(u1,  _ < 4))
+      assert(forall(u1, _ > 0))
+      assert(!forall(u1, _ > 2))
+      assert(!forall(u1, _< 2))
+    }
+  }
+
+  test("Exists - tests") {
+    new TestSets {
+      val u1 = union(union(s1, s2), s3)
+      assert(exists(u1,  _ < 4))
+      assert(exists(u1, _ > 0))
+      assert(exists(u1, _ > 2))
+      assert(!exists(u1, _ > 3))
+
+    }
+  }
+
+  test("Map - tests") {
+    new TestSets {
+      val u1 = union(union(s1, s2), s3)
+      val afterMap = map(u1, x => x - 1)
+      assert(contains(afterMap, 0))
+      assert(contains(afterMap, 1))
+      assert(contains(afterMap, 2))
+      assert(!contains(afterMap, 3))
+    }
+  }
+
 }
