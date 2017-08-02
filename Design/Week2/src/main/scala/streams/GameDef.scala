@@ -1,7 +1,6 @@
 package streams
 
 import common._
-
 /**
  * This trait represents the layout and building blocks of the game
  */
@@ -81,7 +80,7 @@ trait GameDef {
    * This function returns the block at the start position of
    * the game.
    */
-  def startBlock: Block = ???
+  def startBlock: Block = Block(startPos, startPos)
 
 
   /**
@@ -132,22 +131,31 @@ trait GameDef {
      * Returns the list of blocks that can be obtained by moving
      * the current block, together with the corresponding move.
      */
-    def neighbors: List[(Block, Move)] = ???
+    def neighbors: List[(Block, Move)] =
+      List((left, Left)) ::: List((right, Right)) ::: List((up, Up)) ::: List((down, Down))
 
     /**
      * Returns the list of positions reachable from the current block
      * which are inside the terrain.
      */
-    def legalNeighbors: List[(Block, Move)] = ???
+    def legalNeighbors: List[(Block, Move)] = {
+      for{
+        n <- neighbors
+        if(n._1.isLegal)
+      } yield n
+    }
+
 
     /**
      * Returns `true` if the block is standing.
      */
-    def isStanding: Boolean = ???
+    def isStanding: Boolean =
+      b1.row == b2.row && b1.col == b2.col
 
     /**
      * Returns `true` if the block is entirely inside the terrain.
      */
-    def isLegal: Boolean = ???
+    def isLegal: Boolean =
+      terrain(b1) && terrain(b2)
   }
 }
