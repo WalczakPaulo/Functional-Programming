@@ -60,11 +60,11 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
   }
 
 
-  property("meld1") = forAll { (h1: H, h2: H) =>
-    val min1 = findMin(h1)
-    val min2 = findMin(h2)
-    val min = findMin(meld(h1, h2))
-    if(min1 > min2) min == min2 else min == min1
+  property("minimum value of merging two heaps, should results in minimum value of one of the two heaps") = forAll{ (heap1: H, heap2: H) =>
+    val minH1 = findMin(heap1)
+    val minH2 = findMin(heap2)
+    val mergedHeapMin = findMin(meld(heap1, heap2))
+    mergedHeapMin == minH1 || mergedHeapMin == minH2
   }
 
 
